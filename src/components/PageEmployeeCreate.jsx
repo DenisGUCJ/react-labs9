@@ -1,5 +1,6 @@
 import React from 'react'
 import { withRouter } from 'react-router-dom'
+import { connect } from "react-redux";
 
 class PageEmployeeCreate extends React.Component {
   constructor(props) {
@@ -12,10 +13,10 @@ class PageEmployeeCreate extends React.Component {
     this.createEmployee = this.createEmployee.bind(this);
 
     this.state = {
-      name: '',
+      name: "",
       age: 18,
-      company: '',
-      email: '',
+      company: "",
+      email: "",
       isSaving: false,
       error: null
     }
@@ -42,20 +43,20 @@ class PageEmployeeCreate extends React.Component {
     
     const { 
       name,
-      age, 
-      company, 
+      age,
+      company,
       email,
     } = this.state;
 
     const employee = { 
       id: Date.now(),
       name, 
-      age, 
-      company, 
+      age,
+      company,
       email };
 
     fetch('http://localhost:3004/employees', {
-      method: 'POST', 
+      method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json'
@@ -73,10 +74,10 @@ class PageEmployeeCreate extends React.Component {
 
   render() {
     const { 
-      name, 
-      age, 
-      company, 
-      email, 
+      name,
+      age,
+      company,
+      email,
       isSaving,
       error,
     } = this.state;
@@ -95,4 +96,14 @@ class PageEmployeeCreate extends React.Component {
   }
 }
 
-export default withRouter(PageEmployeeCreate);
+const mapStateToProps = (state /*, ownProps*/) => {
+  return {
+    employees: state.employees
+  }
+}
+
+const mapDispatchToProps = (dispatch) => ({
+  employeesLoaded: employees => dispatch(employeesLoaded(employees))
+})
+
+export default connect(mapStateToProps,mapDispatchToProps)(withRouter(PageEmployeeCreate));
